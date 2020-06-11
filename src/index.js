@@ -32,9 +32,9 @@ class Calculator extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			current: 0,
-			previous: 0,
-			formula: 0
+			display: 0,
+			formula: 0,
+			lastWasOperator: false,
 		}
 		this.handleClear = this.handleClear.bind(this);
 		this.handleEquals = this.handleEquals.bind(this);
@@ -44,38 +44,66 @@ class Calculator extends React.Component {
 	}
 
 	handleClear() {
-		this.setState({current: 0, formula: 0});
+		this.setState({display: 0, formula: 0, lastWasOperator: false});
 	}
 
-	handleEquals() {
-		/**var result = eval(this.state.formula);
-		this.setState({ current: result, sum: this.state.formula.concat("="+result)});*/
+	handleEquals() {	
+		console.log(this.state.formula);
+		var result = this.getResult(this.state.formula);
+		const formula = this.state.formula+"="+result;
+
+		this.setState({
+			display: result,
+			formula 
+		});
+	}
+
+	getResult(formula)  {
+		return new Function('return ' + formula) ();
 	}
 
 	handleDecimal() {
-		const current = this.state.current+".";
-		this.setState({
-			formula: current,
-			current: current
-		})
+		var display = this.state.display;
+		if(!display.includes(".")) {
+			display = this.state.display+".";
+			this.setState({
+				formula: this.state.formula+".",
+				display
+			})
+		}
 	}
 
 	handleNumber(num) {
-		var previous;
 		var formula;
+		var display = this.state.display;
 		if(this.state.formula === 0) {
-			previous = 0;
-			formula = num;
-		} else {
-			previous = this.state.current;
-			formula = this.state.formula+num;
+			formula = num; 
+			display = num;
 		}
-		this.setState({formula, current: num, previous})
+		else {
+			formula = this.state.formula+num;
+
+			if(this.state.lastWasOperator) {
+				display = num;
+			} else {
+				display = display+num;
+			}
+		}
+		this.setState({formula, display, lastWasOperator: false})
 	}
 
 	handleOperator(operator) {
-		var result = this.state.formula+operator;
-		this.setState({formula: result, current: operator});
+		var formula = this.state.formula;
+
+		if(this.state.lastWasOperator) {
+			formula = formula.slice(0, formula.length-1);
+		}
+		var result = formula+operator;
+		this.setState({
+			formula: result, 
+			display: operator, 
+			lastWasOperator: true
+		});
 	}
 
 	render() {
@@ -83,11 +111,10 @@ class Calculator extends React.Component {
 				<div id="container">
 					<div id="display-section">
 						<div id="formula">{this.state.formula}</div>
-						<div id="display">{this.state.current}</div>
+						<div id="display">{this.state.display}</div>
 					</div>
-					<InputControl handleNumber={e => this.handleNumber(e)} handleOperator={e=>this.handleOperator(e)} handleEquals={this.handleEquals()} handleClear={this.handleClear} handleDecimal={this.handleDecimal}/>
+					<InputControl handleNumber={e => this.handleNumber(e)} handleOperator={e=>this.handleOperator(e)} handleEquals={this.handleEquals} handleClear={this.handleClear} handleDecimal={this.handleDecimal}/>
 				</div>
-
 		);
 	}
 }

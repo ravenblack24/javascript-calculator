@@ -32,6 +32,11 @@ body {
 #display-section {
   color: #fff;
   text-align: right;
+  font-size: 1.75rem;
+}
+#formula {
+  color: orange;
+  font-size: 1.25rem;
 }
 
 .clear {
