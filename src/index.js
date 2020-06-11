@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import ReactFCCtest from 'react-fcctest';
 
 class InputControl extends React.Component {
 	render() {
@@ -65,10 +66,9 @@ class Calculator extends React.Component {
 	handleDecimal() {
 		var display = this.state.display;
 		if(!display.includes(".")) {
-			display = this.state.display+".";
 			this.setState({
 				formula: this.state.formula+".",
-				display
+				display: this.state.display+"."
 			})
 		}
 	}
@@ -77,8 +77,12 @@ class Calculator extends React.Component {
 		var formula;
 		var display = this.state.display;
 		if(this.state.formula === 0) {
-			formula = num; 
-			display = num;
+			if(num > 0) {
+				formula = num; 
+				display = num;
+			} else {
+				return;
+			}
 		}
 		else {
 			formula = this.state.formula+num;
@@ -95,8 +99,12 @@ class Calculator extends React.Component {
 	handleOperator(operator) {
 		var formula = this.state.formula;
 
-		if(this.state.lastWasOperator) {
-			formula = formula.slice(0, formula.length-1);
+		if(formula.includes("=")) {
+			formula = this.state.display;
+		} else {
+			if(this.state.lastWasOperator && operator !== "-") {
+				formula = formula.slice(0, formula.length-1);
+			}
 		}
 		var result = formula+operator;
 		this.setState({
@@ -108,6 +116,7 @@ class Calculator extends React.Component {
 
 	render() {
 		return (
+			<React.Fragment>
 				<div id="container">
 					<div id="display-section">
 						<div id="formula">{this.state.formula}</div>
@@ -115,6 +124,8 @@ class Calculator extends React.Component {
 					</div>
 					<InputControl handleNumber={e => this.handleNumber(e)} handleOperator={e=>this.handleOperator(e)} handleEquals={this.handleEquals} handleClear={this.handleClear} handleDecimal={this.handleDecimal}/>
 				</div>
+				<ReactFCCtest />
+			</React.Fragment>
 		);
 	}
 }
