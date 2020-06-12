@@ -63,9 +63,15 @@ button:hover {
   color: #fff;
   text-align: right;
   font-size: 1.75rem;
-  height: 4rem;
 }
 #formula {
   color: orange;
   font-size: 1.25rem;
+  min-height: 1.5rem;
+  word-wrap: break-word;
+}
+
+#display {
+  min-height: 1.5rem;
+  word-wrap: break-word;
 }

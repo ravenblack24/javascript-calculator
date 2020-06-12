@@ -34,7 +34,7 @@ class Calculator extends React.Component {
 		super(props);
 		this.state = {
 			display: 0,
-			formula: 0,
+			formula: "",
 			operatorCount: 0
 		}
 		this.handleClear = this.handleClear.bind(this);
@@ -45,18 +45,25 @@ class Calculator extends React.Component {
 	}
 
 	handleClear() {
-		this.setState({display: 0, formula: 0, operatorCount: 0});
+		this.setState({display: 0, formula: "", operatorCount: 0});
 	}
 
 	handleEquals() {	
-		console.log(this.state.formula);
-		var result = this.getResult(this.state.formula);
-		const formula = this.state.formula+"="+result;
+		var formula = this.state.formula;
+		const opCount = this.state.operatorCount;
 
-		this.setState({
-			display: result,
-			formula 
-		});
+		if(opCount > 0) {
+			formula = formula.slice(0, formula.length-opCount);
+		}
+		if(formula[0] !== "+" && formula[0] !== "/" && formula[0] !== "*") {		
+			var result = this.getResult(formula);
+			const finalFormula = formula+"="+result;
+
+			this.setState({
+				display: result,
+				formula: finalFormula 
+			});
+		}
 	}
 
 	getResult(formula)  {
@@ -76,7 +83,7 @@ class Calculator extends React.Component {
 	handleNumber(num) {
 		var formula;
 		var display = this.state.display;
-		if(this.state.formula === 0) {
+		if(this.state.formula === "") {
 			if(num > 0) {
 				formula = num; 
 				display = num;
@@ -99,21 +106,23 @@ class Calculator extends React.Component {
 	handleOperator(operator) {
 		var formula = this.state.formula;
 		var count = this.state.operatorCount;
-		
-		if(formula.includes("=")) {
-			formula = this.state.display;
-		} else {
-			if(this.state.operatorCount === 1 && operator !=="-") {
-				formula = formula.slice(0, formula.length-1);
-				count = count-1;
-			} 
-			if(this.state.operatorCount > 1){
-				formula = formula.slice(0, formula.length-2);
-				count = count-2;
+
+		if(formula !== "") {		
+			if(formula.includes("=")) {
+				formula = this.state.display;
+			} else {
+				if(this.state.operatorCount === 1 && operator !=="-") {
+					formula = formula.slice(0, formula.length-1);
+					count = count-1;
+				} 
+				if(this.state.operatorCount > 1){
+					formula = formula.slice(0, formula.length-2);
+					count = count-2;
+				}
+				// if(this.state.operatorCount > 0 && operator !== "-") {
+				// 	formula = formula.slice(0, formula.length-1);
+				// }
 			}
-			// if(this.state.operatorCount > 0 && operator !== "-") {
-			// 	formula = formula.slice(0, formula.length-1);
-			// }
 		}
 		var result = formula+operator;
 		count++;
