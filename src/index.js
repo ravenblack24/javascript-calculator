@@ -35,7 +35,7 @@ class Calculator extends React.Component {
 		this.state = {
 			display: 0,
 			formula: 0,
-			lastWasOperator: false,
+			operatorCount: 0
 		}
 		this.handleClear = this.handleClear.bind(this);
 		this.handleEquals = this.handleEquals.bind(this);
@@ -45,7 +45,7 @@ class Calculator extends React.Component {
 	}
 
 	handleClear() {
-		this.setState({display: 0, formula: 0, lastWasOperator: false});
+		this.setState({display: 0, formula: 0, operatorCount: 0});
 	}
 
 	handleEquals() {	
@@ -60,7 +60,7 @@ class Calculator extends React.Component {
 	}
 
 	getResult(formula)  {
-		//return new Function('return ' + formula) ();
+		return new Function('return ' + formula) ();
 	}
 
 	handleDecimal() {
@@ -87,30 +87,40 @@ class Calculator extends React.Component {
 		else {
 			formula = this.state.formula+num;
 
-			if(this.state.lastWasOperator) {
+			if(this.state.operatorCount > 0) {
 				display = num;
 			} else {
 				display = display+num;
 			}
 		}
-		this.setState({formula, display, lastWasOperator: false})
+		this.setState({formula, display, operatorCount: 0})
 	}
 
 	handleOperator(operator) {
 		var formula = this.state.formula;
-
+		var count = this.state.operatorCount;
+		
 		if(formula.includes("=")) {
 			formula = this.state.display;
 		} else {
-			if(this.state.lastWasOperator && operator !== "-") {
+			if(this.state.operatorCount === 1 && operator !=="-") {
 				formula = formula.slice(0, formula.length-1);
+				count = count-1;
+			} 
+			if(this.state.operatorCount > 1){
+				formula = formula.slice(0, formula.length-2);
+				count = count-2;
 			}
+			// if(this.state.operatorCount > 0 && operator !== "-") {
+			// 	formula = formula.slice(0, formula.length-1);
+			// }
 		}
 		var result = formula+operator;
+		count++;
 		this.setState({
 			formula: result, 
 			display: operator, 
-			lastWasOperator: true
+			operatorCount: count
 		});
 	}
 
