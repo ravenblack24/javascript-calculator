@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import ReactFCCtest from 'react-fcctest';
 
+function Display(props) {
+	return (
+		<div id={props.id}>{props.value}</div>
+	);
+}
+
 class InputControl extends React.Component {
 	render() {
 		return (
@@ -119,9 +125,6 @@ class Calculator extends React.Component {
 					formula = formula.slice(0, formula.length-2);
 					count = count-2;
 				}
-				// if(this.state.operatorCount > 0 && operator !== "-") {
-				// 	formula = formula.slice(0, formula.length-1);
-				// }
 			}
 		}
 		var result = formula+operator;
@@ -138,8 +141,8 @@ class Calculator extends React.Component {
 			<React.Fragment>
 				<div id="container">
 					<div id="display-section">
-						<div id="formula">{this.state.formula}</div>
-						<div id="display">{this.state.display}</div>
+						<Display id="formula" value={this.state.formula} />
+						<Display id="display" value={this.state.display} />
 					</div>
 					<InputControl handleNumber={e => this.handleNumber(e)} handleOperator={e=>this.handleOperator(e)} handleEquals={this.handleEquals} handleClear={this.handleClear} handleDecimal={this.handleDecimal}/>
 				</div>
