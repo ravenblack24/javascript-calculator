@@ -47,7 +47,7 @@ This app was built to satisfy and subsequently validated against the following U
 The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 
 ## Technologies
-* React.js, vanilla Javascript and react-helmet
+* React.js, vanilla JS
 
 ## Setup
 In the project directory you should run:
