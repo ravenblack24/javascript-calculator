@@ -2,11 +2,14 @@
 > Repository for my solution to the freeCodeCamp front-end libraries Javascript Calculator challenge.
 
 ## Table of contents
+* [Status](#status)
 * [General Info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
-* [Status](#status)
 * [Contact](#contact)
+
+## Status
+Project is complete and an [interactive demo is available here](https://ravenblack24.github.io/javascript-calculator/).
 
 ## General info
 This app was built to satisfy and subsequently validated against the following User Stories:
@@ -68,9 +71,6 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.<br />
 The app is ready to be deployed!
-
-## Status
-Project is complete and an [interactive demo is available here](https://ravenblack24.github.io/javascript-calculator/).
 
 ## Contact
 Created by [Kay Pea](https://imkp.co.uk) - feel free to contact me!
